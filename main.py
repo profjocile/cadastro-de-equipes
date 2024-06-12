@@ -38,7 +38,11 @@ def ler_nomes(nomes):
     print(f"{quantos_nomes} Nomes lidos com sucesso!")
 
 def criar_equipes(nomes, nomes_equipes):
-    num_integrantes = int(input(f"Digite o número de integrantes (máximo 4 de {len(nomes)}): "))
+    num_integrantes = 5
+    while num_integrantes > 4:
+        num_integrantes = int(input(f"Digite o número de integrantes (máximo 4 de {len(nomes)}): "))
+    if num_integrantes > len(nomes):
+        num_integrantes = len(nomes)
     random.shuffle(nomes)
     equipe = [[] for _ in range(num_integrantes)]
     for i in range(num_integrantes):
@@ -60,6 +64,8 @@ def criar_equipes(nomes, nomes_equipes):
 def mostrar_equipes(nomes_equipes):
     for nome_equipe in nomes_equipes:
         with open(f"{nome_equipe}.txt", "r") as arquivo:
+            print('=' * 10)
+            print(f"Equipe {nome_equipe}:")
             for nome in arquivo:
                 print(nome.strip())
     print(f"{len(nomes_equipes)} equipes criadas com sucesso!")
