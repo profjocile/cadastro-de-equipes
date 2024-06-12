@@ -42,7 +42,19 @@ def criar_equipes(nomes):
     for i in range(num_integrantes):
         equipe[i % num_integrantes].append(nomes.pop())
     print(equipe)
+    confirma = input("Confirma a criação das equipes? (S/N): ").lower()
+    if confirma == "s":
+        salvar_equipes(equipe)
+    else:
+        for i in range(num_integrantes):
+            nomes.append(equipe.pop()) 
     return nomes
+
+def salvar_equipes(equipe):
+    with open("equipes.txt", "a") as arquivo:
+        for nome in equipe:
+            arquivo.write(", ".join(nome) + "\n")
+    print("Equipe gravadas com sucesso!")
 
 while True:
     opcao = menu()
