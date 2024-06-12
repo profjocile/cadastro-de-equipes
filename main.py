@@ -5,7 +5,9 @@ nomes = []
 def menu():
     print("1 - Adicionar nomes")
     print("2 - Gravar nomes")
-    print("3 - Sair")
+    print("3 - Ler nomes")
+    print("4 - Sortear nomes para equipe")
+    print("0 - Sair")
     opcao = int(input("Digite a opção: "))
     return opcao
 
@@ -24,12 +26,23 @@ def gravar_nomes(nomes):
             arquivo.write(nome + "\n")
     print("Nomes gravados com sucesso!")
 
-def criar_equipes(nomes, num_equipes):
+def ler_nomes(nomes):
+    with open("nomes.txt", "r") as arquivo:
+        for nome in arquivo:
+            nomes.append(nome.strip())
+    for nome in nomes:
+        print(nome)
+    quantos_nomes = len(nomes)
+    print(f"{quantos_nomes} Nomes lidos com sucesso!")
+
+def criar_equipes(nomes):
+    num_integrantes = int(input("Digite o número de integrantes (máximo 4): "))
     random.shuffle(nomes)
-    equipes = [[] for _ in range(num_equipes)]
-    for i, nome in enumerate(nomes):
-        equipes[i % num_equipes].append(nome)
-    return equipes
+    equipe = [[] for _ in range(num_integrantes)]
+    for i in range(num_integrantes):
+        equipe[i % num_integrantes].append(nomes.pop())
+    print(equipe)
+    return nomes
 
 while True:
     opcao = menu()
@@ -37,6 +50,10 @@ while True:
         nomes = adicionar_nomes(nomes)
     elif opcao == 2:
         gravar_nomes(nomes)
+    elif opcao == 3:
+        ler_nomes(nomes)
+    elif opcao == 4:
+        nomes = criar_equipes(nomes)
     elif opcao == 0:
         break
 
