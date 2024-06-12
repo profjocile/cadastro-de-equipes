@@ -50,12 +50,17 @@ def criar_equipes(nomes, nomes_equipes):
     print(equipe)
     confirma = input("Confirma a criação das equipes? (S/N): ").lower()
     if confirma == "s":
-        nome_equipe = input("Digite o nome da equipe: ")
-        with open(f"{nome_equipe}.txt", "w") as arquivo:
-            for nome in equipe:
-                arquivo.write(", ".join(nome) + "\n")
-        nomes_equipes.append(nome_equipe)
-        print("Equipe gravadas com sucesso!")
+        while True:
+            nome_equipe = input("Digite o nome da equipe: ")
+            if nome_equipe in nomes_equipes:
+                print("Já existe uma equipe com esse nome!")
+            else:
+                with open(f"{nome_equipe}.txt", "w") as arquivo:
+                    for nome in equipe:
+                        arquivo.write(", ".join(nome) + "\n")
+                nomes_equipes.append(nome_equipe)
+                print("Equipe gravadas com sucesso!")
+                break
     else:
         for i in range(num_integrantes):
             nomes.append(equipe.pop()) 
@@ -81,7 +86,10 @@ while True:
     elif opcao == 3:
         ler_nomes(nomes)
     elif opcao == 4:
-        nomes, nomes_equipes = criar_equipes(nomes, nomes_equipes)
+        if len(nomes) > 0:
+            nomes, nomes_equipes = criar_equipes(nomes, nomes_equipes)            
+        else:
+            print("Não é possível criar equipes sem nomes!")
     elif opcao == 5:
         mostrar_equipes(nomes_equipes)
     elif opcao == 0:
