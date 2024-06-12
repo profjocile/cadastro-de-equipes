@@ -1,12 +1,14 @@
 import random
 
 nomes = []
+nomes_equipes = []
 
 def menu():
     print("1 - Adicionar nomes")
     print("2 - Gravar nomes")
     print("3 - Ler nomes")
     print("4 - Sortear nomes para equipe")
+    print("5 - Ler nomes da equipe")
     print("0 - Sair")
     opcao = int(input("Digite a opção: "))
     return opcao
@@ -35,8 +37,8 @@ def ler_nomes(nomes):
     quantos_nomes = len(nomes)
     print(f"{quantos_nomes} Nomes lidos com sucesso!")
 
-def criar_equipes(nomes):
-    num_integrantes = int(input("Digite o número de integrantes (máximo 4): "))
+def criar_equipes(nomes, nomes_equipes):
+    num_integrantes = int(input(f"Digite o número de integrantes (máximo 4 de {len(nomes)}): "))
     random.shuffle(nomes)
     equipe = [[] for _ in range(num_integrantes)]
     for i in range(num_integrantes):
@@ -44,17 +46,25 @@ def criar_equipes(nomes):
     print(equipe)
     confirma = input("Confirma a criação das equipes? (S/N): ").lower()
     if confirma == "s":
-        salvar_equipes(equipe)
+        nome_equipe = input("Digite o nome da equipe: ")
+        with open(f"{nome_equipe}.txt", "w") as arquivo:
+            for nome in equipe:
+                arquivo.write(", ".join(nome) + "\n")
+        nomes_equipes.append(nome_equipe)
+        print("Equipe gravadas com sucesso!")
     else:
         for i in range(num_integrantes):
             nomes.append(equipe.pop()) 
-    return nomes
+    return nomes, nomes_equipes
 
-def salvar_equipes(equipe):
-    with open("equipes.txt", "a") as arquivo:
-        for nome in equipe:
-            arquivo.write(", ".join(nome) + "\n")
-    print("Equipe gravadas com sucesso!")
+def mostrar_equipes(nomes_equipes):
+    for nome_equipe in nomes_equipes:
+        with open(f"{nome_equipe}.txt", "r") as arquivo:
+            for nome in arquivo:
+                print(nome.strip())
+    print(f"{len(nomes_equipes)} equipes criadas com sucesso!")
+
+# Programa principal
 
 while True:
     opcao = menu()
@@ -65,14 +75,8 @@ while True:
     elif opcao == 3:
         ler_nomes(nomes)
     elif opcao == 4:
-        nomes = criar_equipes(nomes)
+        nomes, nomes_equipes = criar_equipes(nomes, nomes_equipes)
+    elif opcao == 5:
+        mostrar_equipes(nomes_equipes)
     elif opcao == 0:
         break
-
-# Exemplo de uso
-# nomes = ["João", "Maria", "Pedro", "Ana", "Carlos", "Beatriz", "Lucas", "Fernanda"]
-# num_equipes = 3
-# equipes = criar_equipes(nomes, num_equipes)
-
-# for i, equipe in enumerate(equipes):
-#     print(f"Equipe {i+1}: {', '.join(equipe)}")
